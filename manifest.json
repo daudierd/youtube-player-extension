@@ -14,8 +14,7 @@
   },
 
   "permissions": [
-    "https://www.youtube.com/*",
-    "tabs"
+    "https://www.youtube.com/*"
   ],
 
   "browser_action": {
@@ -25,6 +24,8 @@
   },
 
   "background": {
-    "scripts": ["background-player.js"]
-  }
+    "page": "background-player.html"
+  },
+
+  "content_security_policy": "script-src 'self' https://www.youtube.com/iframe_api https://ytmp3.mobi/api/ https://s.ytimg.com/yts/jsbin/?/www-widgetapi.js; object-src 'self'"
 }
