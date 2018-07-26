@@ -38,7 +38,7 @@ export default class PlayerManager {
   }
 
   pauseVideo() {
-    //TODO
+    this.player.pauseVideo();
   }
 
   stopVideo() {
@@ -46,28 +46,28 @@ export default class PlayerManager {
   }
 
   playNextVideo() {
-    //TODO
+    this.player.nextVideo();
   }
 
   playPreviousVideo() {
-    //TODO
+    this.player.previousVideo();
   }
 
   getVideoId() {
-    let regex = /https?:\/\/www\.youtube\.com\/watch\?v=(.+)/
+    let regex = /https?:\/\/www\.youtube\.com\/watch\?(.+&)?v=(.+)/
     let result = regex.exec(this.player.getVideoUrl());
 
-    return (result) ? result[1] : null;
+    return (result) ? result[2] : null;
   }
 
   getVideoTitle(videoId) {
+    const currVideoId = this.getVideoId();
     // Rule out case where videoId is empty AND no video is loaded yet
-    if (videoId == undefined && this.player.getVideoUrl() == "https://www.youtube.com/watch")
+    if (videoId == undefined && !currVideoId)
       throw Error("No valid videoId provided to the function.");
 
-    let videoURL = (videoId == undefined)
-      ? this.player.getVideoUrl()
-      : "https://www.youtube.com/watch?v=".concat(videoId)
+    let videoURL = "https://www.youtube.com/watch?v=".concat(
+      (videoId == undefined) ? currVideoId : videoId);
 
     let metadata = JSON.parse(get("https://www.youtube.com/oembed?url=" + videoURL + "&format=json"));
     return metadata.title;
