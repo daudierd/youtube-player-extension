@@ -61,6 +61,15 @@ export default class PlayerManager {
   }
 
   getVideoTitle(videoId) {
-    //TODO
+    // Rule out case where videoId is empty AND no video is loaded yet
+    if (videoId == undefined && this.player.getVideoUrl() == "https://www.youtube.com/watch")
+      throw Error("No valid videoId provided to the function.");
+
+    let videoURL = (videoId == undefined)
+      ? this.player.getVideoUrl()
+      : "https://www.youtube.com/watch?v=".concat(videoId)
+
+    let metadata = JSON.parse(get("https://www.youtube.com/oembed?url=" + videoURL + "&format=json"));
+    return metadata.title;
   }
 }
