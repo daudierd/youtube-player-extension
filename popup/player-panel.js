@@ -1,10 +1,10 @@
-var previousButton = document.querySelector('#previous-button');
-var playButton = document.querySelector('#play-button');
-var pauseButton = document.querySelector('#pause-button');
-var stopButton = document.querySelector('#stop-button');
-var nextButton = document.querySelector('#next-button');
-var notFavoriteButton = document.querySelector('#not-favorite-button');
-var favoriteButton = document.querySelector('#favorite-button');
+const previousButton = document.querySelector('#previous-button');
+const playButton = document.querySelector('#play-button');
+const pauseButton = document.querySelector('#pause-button');
+const stopButton = document.querySelector('#stop-button');
+const nextButton = document.querySelector('#next-button');
+const notFavoriteButton = document.querySelector('#not-favorite-button');
+const favoriteButton = document.querySelector('#favorite-button');
 
 function toggleButton(buttonToHide, buttonToShow, callback) {
   return function(event) {
@@ -16,7 +16,17 @@ function toggleButton(buttonToHide, buttonToShow, callback) {
   }
 }
 
-playButton.onclick = toggleButton(playButton, pauseButton);
-pauseButton.onclick = toggleButton(pauseButton, playButton);
+function makeSendCommand(command, payload) {
+  return function() {
+    browser.runtime.sendMessage({ command, payload })
+  }
+}
+
+playButton.onclick = toggleButton(playButton, pauseButton, makeSendCommand('play'));
+pauseButton.onclick = toggleButton(pauseButton, playButton, makeSendCommand('pause'));
+stopButton.onclick = toggleButton(pauseButton, playButton, makeSendCommand('stop'));
+previousButton.onclick = makeSendCommand('previous');
+nextButton.onclick = makeSendCommand('next');
+
 notFavoriteButton.onclick = toggleButton(notFavoriteButton, favoriteButton);
 favoriteButton.onclick = toggleButton(favoriteButton, notFavoriteButton);
