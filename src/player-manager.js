@@ -13,10 +13,13 @@ export default class PlayerManager {
 
     window.onYouTubeIframeAPIReady = () => {
       new YT.Player('player', {
-        events: { 'onReady': ((event) => {
+        events: {
+          'onReady': ((event) => {
             this.player = event.target;
             console.log("PlayerManager started!");
-          })}
+          }),
+          'onStateChange': ((event) => { this.onPlayerStateChange(event.data); })
+        }
       });
     }
     document.body.appendChild(script);
@@ -71,5 +74,14 @@ export default class PlayerManager {
 
     let metadata = JSON.parse(get("https://www.youtube.com/oembed?url=" + videoURL + "&format=json"));
     return metadata.title;
+  }
+
+  onPlayerStateChange(state) {
+    browser.storage.local.set({
+      player: {
+        state,
+        currentTitle: this.getVideoTitle()
+      }
+    })
   }
 }

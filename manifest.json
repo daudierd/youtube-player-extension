@@ -14,7 +14,8 @@
   },
 
   "permissions": [
-    "https://www.youtube.com/*"
+    "https://www.youtube.com/*",
+    "storage"
   ],
 
   "browser_action": {
