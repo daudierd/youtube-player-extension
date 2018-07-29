@@ -1,0 +1,30 @@
+body {
+  width: 150px;
+}
+
+/* SEARCHBAR */
+
+#searchbar input {
+  width: 100%;
+}
+
+/* CONTROLS */
+
+#controls {
+  display: flex;
+}
+
+#controls img {
+  flex: 1 0;
+  margin: 5px;
+}
+
+#controls img:hover {
+  -webkit-filter: drop-shadow(2px 2px 2px #222);
+  filter: drop-shadow(2px 2px 2px #222);
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
