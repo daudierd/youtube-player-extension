@@ -10,6 +10,7 @@ export default class PlayerManager {
     let script = document.createElement('script');
     script.id = 'iframeApi'
     script.src = 'https://www.youtube.com/iframe_api';
+    browser.storage.local.remove('player'); // In case the player Manager hasn't been properly stopped
 
     window.onYouTubeIframeAPIReady = () => {
       new YT.Player('player', {
@@ -29,6 +30,7 @@ export default class PlayerManager {
     console.log("Stopping PlayerManager...");
     this.player.destroy();
     this.player = undefined;
+    browser.storage.local.remove('player');
     let script = document.getElementById('iframeApi');
     script.parentNode.removeChild(script);
     console.log("PlayerManager has stopped");
@@ -80,6 +82,7 @@ export default class PlayerManager {
     browser.storage.local.set({
       player: {
         state,
+        videoId: this.getVideoId(),
         currentTitle: this.getVideoTitle()
       }
     })

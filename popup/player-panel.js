@@ -25,13 +25,22 @@ function makeSendCommand(command, payload) {
   }
 }
 
+let videoId;
 initialize();
 
 function initialize() {
-  browser.storage.local.get('player').then((res) => {
-    titleBar.innerHTML = (res.player.currentTitle) ? res.player.currentTitle : "No title";
-    if(res.player.state == 1) // Playing
-      toggleButton(playButton, pauseButton)();
+  browser.storage.local.set({
+    favorites: []
+  });
+  browser.storage.local.get(['player', 'favorites']).then((res) => {
+    if(res.player){
+      titleBar.innerHTML = (res.player.currentTitle) ? res.player.currentTitle : '';
+      videoId = res.player.videoId;
+      if(res.player.state == 1) // Playing
+        toggleButton(playButton, pauseButton)();
+      if(videoId && res.favorites && res.favorites.includes(videoId))
+        toggleButton(notFavoriteButton, favoriteButton)();
+    }
   });
 
   playButton.onclick = toggleButton(playButton, pauseButton, makeSendCommand('play'));
@@ -40,6 +49,43 @@ function initialize() {
   previousButton.onclick = makeSendCommand('previous');
   nextButton.onclick = makeSendCommand('next');
 
-  notFavoriteButton.onclick = toggleButton(notFavoriteButton, favoriteButton);
-  favoriteButton.onclick = toggleButton(favoriteButton, notFavoriteButton);
+  notFavoriteButton.onclick = function() {
+    if(videoId) {
+      browser.storage.local.get('favorites').then((res) => {
+        console.log(res.favorites);
+        res.favorites.push(videoId);
+      })
+    }
+  }
+
+  favoriteButton.onclick = function() {
+    if(videoId) {
+      browser.storage.local.get('favorites').then((res) => {
+        console.log(res.favorites);
+        res.favorites.splice(res.favorites.findIndex(videoId), 1);
+      })
+    }
+  }
 }
+
+browser.storage.onChanged.addListener(function(changes, areaName) {
+  if(areaName == 'local') {
+    if(changes.player){
+      if(changes.player.newValue.currentTitle)
+        titleBar.innerHTML = changes.player.currentTitle;
+      if(changes.player.newValue.state == 1) {
+        toggleButton(playButton, pauseButton)();
+      } else {
+        toggleButton(pauseButton, playButton)();
+      }
+      videoId = changes.player.newValue.videoId;
+    }
+    if(changes.favorites) {
+      if(videoId && changes.favorites.includes(videoId)) {
+        toggleButton(notFavoriteButton, favoriteButton)();
+      } else {
+          toggleButton(favoriteButton, notFavoriteButton)();
+      }
+    }
+  }
+})
