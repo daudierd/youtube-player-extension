@@ -24,6 +24,11 @@
     "default_popup": "popup/player-panel.html"
   },
 
+  "options_ui": {
+    "page": "options/options.html",
+    "browser_style": true
+  },
+
   "background": {
     "page": "background-player.html"
   },
