@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <form>
+      <h4>Search options</h4>
+      <p>Please indicate the default behavior when pressing 'Enter' in search bar:</p>
+      <input id="load-search" type="radio" name="search" value="load"/>Search and play immediately<br>
+      <input id="queue-search" type="radio" name="search" value="queue" disabled/>Queue search query and play at the end
+
+      <h4>Data API</h4>
+      <p>In order to fully experience YouTube Player Extension features,
+        you need to enable YouTube Data API</p>
+      <input id="data-api-checkbox" type="checkbox" name="enableDataAPI" disabled/>Enable YouTube DataAPI<br>
+      <input id="data-api-clientid" type="text" placeholder="Client ID" size="40" style="margin-top:5px"/><br>
+      <input id="data-api-key" type="text" placeholder="API Key" size="40" style="margin-top:5px"/>
+    </form>
+    <script src="options.js"></script>
+  </body>
+</html>
